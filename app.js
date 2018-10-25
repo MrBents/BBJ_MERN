@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 var mongoose = require("mongoose");
+var config = require("./config");
 
 var indexRouter = require("./routes/index");
 var conveyorsRouter = require("./routes/conveyors");
@@ -44,14 +45,26 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
+app.listen(config.port, function() {
+  console.log("Example app listening on port " + config.port + "!");
+});
+
 mongoose.connect(
-  dbUrl,
-  err => {
-    if ((err, client)) console.log("MongoDB connection error", err);
+  config.db_url,
+  (err, client) => {
+    if (err) console.log("MongoDB connection error", err);
+    else {
+      console.log("Successful mongo connection");
+    }
   }
 );
 
 var db = mongoose.connection;
+
+//Bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
+
+// var db = mongoose.connection;
+// db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 module.exports = app;

@@ -1,18 +1,19 @@
 var express = require("express");
 var router = express.Router();
+const ConveyorModel = require("../models/conveyor");
 
-/* GET users listing. */
-router.get("/", function(req, res, next) {
-  res.json([
-    {
-      id: 1,
-      username: "someppl"
-    },
-    {
-      id: 2,
-      username: "lollipop"
-    }
-  ]);
+/* GET conveyors listing. */
+router.get("/", (req, res) => {
+  ConveyorModel.find({})
+    .sort({ number: 1 })
+    .exec((err, conveyors) => {
+      if (err) res.sendStatus(500);
+      let conveyorList = [];
+      conveyors.forEach(element => {
+        conveyorList.push({ number: element.number });
+      });
+      res.json(conveyorList);
+    });
 });
 
 module.exports = router;
