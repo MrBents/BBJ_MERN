@@ -5,12 +5,25 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 var mongoose = require("mongoose");
+const http = require("http");
+const socketIO = require("socket.io");
 var config = require("./config");
 
 var indexRouter = require("./routes/index");
 var conveyorsRouter = require("./routes/conveyors");
 
 var app = express();
+const server = http.createServer(app);
+
+const io = socketIO(server);
+
+io.on("connection", socket => {
+  console.log("User connected");
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
 
 mongoose.Promise = Promise;
 
@@ -45,7 +58,7 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-app.listen(config.port, function() {
+server.listen(config.port, function() {
   console.log("Example app listening on port " + config.port + "!");
 });
 
