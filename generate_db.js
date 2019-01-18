@@ -64,6 +64,30 @@ function deleteConveyors() {
   });
 }
 
+function deleteImages() {
+  return new Promise((resolve, reject) => {
+    mongoose.connection.db.dropCollection("images", (err, result) => {
+      if (err) reject(err);
+      else {
+        console.log("Dropped conveyors collection");
+        resolve();
+      }
+    });
+  });
+}
+
+function deleteSummaries() {
+  return new Promise((resolve, reject) => {
+    mongoose.connection.db.dropCollection("batchsummaries", (err, result) => {
+      if (err) reject(err);
+      else {
+        console.log("Dropped conveyors collection");
+        resolve();
+      }
+    });
+  });
+}
+
 mongoose.connect(
   config.db_url,
   async (err, client) => {
@@ -72,6 +96,8 @@ mongoose.connect(
       console.log("Successful mongo connection");
       try {
         await deleteConveyors();
+        await deleteImages();
+        await deleteSummaries();
       } catch (err) {}
       generateData();
     }

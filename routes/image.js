@@ -4,7 +4,7 @@ const ImageModel = require("../models/image");
 const fs = require("fs");
 
 router.get("/", (req, res) => {
-  ImageModel.find({ number: req.query.id }, (err, img) => {
+  ImageModel.find({ _id: req.query.id }, (err, img) => {
     if (err) res.send(500);
     else {
       res.writeHead(200, { "Content-Type": "image/jpeg" });

@@ -16,6 +16,7 @@ const server = http.createServer(app);
 const io = socketIO(server);
 var indexRouter = require("./routes/index");
 var conveyorsRouter = require("./routes/conveyors")(io, multer);
+var statisticsRouter = require("./routes/statistics");
 var imageRouter = require("./routes/image");
 
 io.on("connection", socket => {
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/conveyors", conveyorsRouter);
+app.use("/stats", statisticsRouter);
 app.use("/image", imageRouter);
 
 // catch 404 and forward to error handler
